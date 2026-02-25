@@ -32,7 +32,7 @@ const ClinicBookingChat = () => {
   const handleAdminUpdate = async () => {
     if (!jsonInput.trim()) return;
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/admin/update-db', {
+      const res = await fetch('https://webandmobile-clinic-backend.hf.space/api/admin/update-db', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(JSON.parse(jsonInput)),
       });
       const data = await res.json();
@@ -71,7 +71,7 @@ const ClinicBookingChat = () => {
     setMessages((prev) => [...prev, { id: Date.now(), sender: 'user', text: '🎤 Processing voice...' }]);
     try {
       const formData = new FormData(); formData.append("audio", audioBlob, fileName);
-      const res = await fetch('http://127.0.0.1:8000/api/transcribe', { method: 'POST', body: formData });
+      const res = await fetch('https://webandmobile-clinic-backend.hf.space/api/transcribe', { method: 'POST', body: formData });
       const data = await res.json();
       if (data.status === "success") {
         setMessages((prev) => { const u = [...prev]; u[u.length - 1].text = `🎤 "${data.text}"`; return u; });
@@ -85,7 +85,7 @@ const ClinicBookingChat = () => {
     setIsTyping(true);
     const chatHistory = messages.slice(1).map(m => ({ sender: m.sender, text: m.text }));
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/chat', {
+      const res = await fetch('https://webandmobile-clinic-backend.hf.space/api/chat', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, history: chatHistory }),
       });
@@ -117,7 +117,7 @@ const ClinicBookingChat = () => {
     setMessages(prev => prev.map(m => m.id === msgId ? { ...m, booking_details: null, text: m.text + " ✅ (Confirmed)" } : m));
 
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/book', {
+      const res = await fetch('https://webandmobile-clinic-backend.hf.space/api/book', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ slot_id: details.slot_id, time: details.time, patient_name: details.patient_name, phone_number: details.phone_number }),
       });
