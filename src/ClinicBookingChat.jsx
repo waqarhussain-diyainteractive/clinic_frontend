@@ -1,4 +1,29 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+
+/* ─── Custom Dialog Hook ─── */
+const useDialog = () => {
+  const [dialog, setDialog] = useState(null);
+  const resolveRef = useRef(null);
+
+  const showAlert = useCallback((message, type = 'info') => {
+    return new Promise((resolve) => {
+      resolveRef.current = resolve;
+      setDialog({ kind: 'alert', message, type });
+    });
+  }, []);
+
+  const showConfirm = useCallback((message) => {
+    return new Promise((resolve) => {
+      resolveRef.current = resolve;
+      setDialog({ kind: 'confirm', message });
+    });
+  }, []);
+
+  const handleOk = () => { setDialog(null); resolveRef.current?.(true); };
+  const handleCancel = () => { setDialog(null); resolveRef.current?.(false); };
+
+  return { dialog, showAlert, showConfirm, handleOk, handleCancel };
+};
 
 const ClinicBookingChat = () => {
   const initialMessage = { id: 1, sender: 'bot', text: 'Hello! I am the Health4Travel Assistant. Tell me where and when you need a doctor.' };
@@ -8,6 +33,7 @@ const ClinicBookingChat = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [jsonInput, setJsonInput] = useState('');
+  const { dialog, showAlert, showConfirm, handleOk, handleCancel } = useDialog();
 
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
@@ -15,14 +41,17 @@ const ClinicBookingChat = () => {
 
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
-  const clearChat = () => { if (window.confirm("Start a new conversation?")) setMessages([initialMessage]); };
+  const clearChat = async () => {
+    const confirmed = await showConfirm("Start a new conversation? This will clear all messages.");
+    if (confirmed) setMessages([initialMessage]);
+  };
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0]; if (!file) return;
     const reader = new FileReader();
     reader.onload = (event) => {
       try { setJsonInput(JSON.stringify(JSON.parse(event.target.result), null, 2)); }
-      catch (error) { alert("Invalid JSON format."); }
+      catch (error) { showAlert("Invalid JSON format. Please check your file.", 'error'); }
     };
     reader.readAsText(file); e.target.value = '';
   };
@@ -34,8 +63,9 @@ const ClinicBookingChat = () => {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(JSON.parse(jsonInput)),
       });
       const data = await res.json();
-      alert(data.message || "Database Updated!"); setIsAdminOpen(false); setJsonInput('');
-    } catch (e) { alert("Invalid JSON format."); }
+      await showAlert(data.message || "Database updated successfully!", 'success');
+      setIsAdminOpen(false); setJsonInput('');
+    } catch (e) { showAlert("Invalid JSON format. Please check your input.", 'error'); }
   };
 
   const toggleRecording = () => { isRecording ? stopRecording() : startRecording(); };
@@ -55,7 +85,7 @@ const ClinicBookingChat = () => {
         stream.getTracks().forEach(track => track.stop());
       };
       mediaRecorder.start(1000); setIsRecording(true);
-    } catch (error) { alert("Microphone access is required."); }
+    } catch (error) { showAlert("Microphone access is required to use voice input.", 'error'); }
   };
 
   const stopRecording = () => {
@@ -696,6 +726,116 @@ const ClinicBookingChat = () => {
         }
         .sync-btn:hover { background: #112940; }
 
+        /* ─── CUSTOM DIALOG ─── */
+        .dialog-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 200;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          background: rgba(10, 25, 40, 0.5);
+          backdrop-filter: blur(6px);
+          animation: dialogFadeIn 0.15s ease;
+        }
+        @keyframes dialogFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .dialog-box {
+          background: #fff;
+          border-radius: 16px;
+          box-shadow: 0 24px 64px rgba(18, 50, 80, 0.22), 0 0 0 1px rgba(0,0,0,0.05);
+          width: 100%;
+          max-width: 340px;
+          overflow: hidden;
+          animation: dialogSlideUp 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes dialogSlideUp {
+          from { transform: translateY(16px) scale(0.97); opacity: 0; }
+          to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        .dialog-icon-bar {
+          padding: 24px 24px 0;
+          display: flex;
+          justify-content: center;
+        }
+        .dialog-icon {
+          width: 52px; height: 52px;
+          border-radius: 50%;
+          display: flex; align-items: center; justify-content: center;
+          flex-shrink: 0;
+        }
+        .dialog-icon.success { background: #ecfdf5; }
+        .dialog-icon.error   { background: #fef2f2; }
+        .dialog-icon.confirm { background: #eff6ff; }
+        .dialog-icon.info    { background: #f0f6fb; }
+        .dialog-icon svg { width: 26px; height: 26px; }
+
+        .dialog-body {
+          padding: 16px 24px 24px;
+          text-align: center;
+        }
+        .dialog-title {
+          font-size: 15px;
+          font-weight: 700;
+          color: #1a2e3f;
+          margin-bottom: 6px;
+          font-family: 'DM Sans', sans-serif;
+        }
+        .dialog-message {
+          font-size: 13.5px;
+          color: #5a7a92;
+          line-height: 1.55;
+          font-family: 'DM Sans', sans-serif;
+        }
+        .dialog-actions {
+          padding: 0 16px 16px;
+          display: flex;
+          gap: 8px;
+        }
+        .dialog-btn-primary {
+          flex: 1;
+          padding: 11px;
+          border-radius: 9px;
+          border: none;
+          font-size: 13.5px;
+          font-weight: 700;
+          font-family: 'DM Sans', sans-serif;
+          cursor: pointer;
+          transition: all 0.15s;
+        }
+        .dialog-btn-primary.navy {
+          background: #183a59;
+          color: #fff;
+        }
+        .dialog-btn-primary.navy:hover { background: #112940; }
+        .dialog-btn-primary.green {
+          background: #059669;
+          color: #fff;
+        }
+        .dialog-btn-primary.green:hover { background: #047857; }
+        .dialog-btn-primary.red {
+          background: #dc2626;
+          color: #fff;
+        }
+        .dialog-btn-primary.red:hover { background: #b91c1c; }
+        .dialog-btn-secondary {
+          flex: 1;
+          padding: 11px;
+          border-radius: 9px;
+          border: 1.5px solid #dce8f2;
+          background: #fff;
+          color: #64748b;
+          font-size: 13.5px;
+          font-weight: 600;
+          font-family: 'DM Sans', sans-serif;
+          cursor: pointer;
+          transition: background 0.15s;
+        }
+        .dialog-btn-secondary:hover { background: #f5f9fc; }
+
         /* ─── FOOTER WATERMARK ─── */
         .powered-by {
           text-align: center;
@@ -894,8 +1034,74 @@ const ClinicBookingChat = () => {
             </button>
           </form>
 
-          <div className="powered-by">Powered by <span>Health4Travel</span></div>
+        <div className="powered-by">Powered by <span>Health4Travel</span></div>
         </div>
+
+        {/* ── CUSTOM DIALOG ── */}
+        {dialog && (
+          <div className="dialog-overlay" onClick={(e) => { if (e.target === e.currentTarget && dialog.kind === 'alert') handleOk(); }}>
+            <div className="dialog-box">
+              <div className="dialog-icon-bar">
+                {dialog.kind === 'confirm' && (
+                  <div className="dialog-icon confirm">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="#2563eb">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                  </div>
+                )}
+                {dialog.kind === 'alert' && dialog.type === 'success' && (
+                  <div className="dialog-icon success">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="#059669">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                )}
+                {dialog.kind === 'alert' && dialog.type === 'error' && (
+                  <div className="dialog-icon error">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="#dc2626">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                    </svg>
+                  </div>
+                )}
+                {dialog.kind === 'alert' && dialog.type === 'info' && (
+                  <div className="dialog-icon info">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="#183a59">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+
+              <div className="dialog-body">
+                <p className="dialog-title">
+                  {dialog.kind === 'confirm' && 'New Conversation'}
+                  {dialog.kind === 'alert' && dialog.type === 'success' && 'Success'}
+                  {dialog.kind === 'alert' && dialog.type === 'error' && 'Something went wrong'}
+                  {dialog.kind === 'alert' && dialog.type === 'info' && 'Notice'}
+                </p>
+                <p className="dialog-message">{dialog.message}</p>
+              </div>
+
+              <div className="dialog-actions">
+                {dialog.kind === 'confirm' && (
+                  <>
+                    <button onClick={handleCancel} className="dialog-btn-secondary">Keep Chat</button>
+                    <button onClick={handleOk} className="dialog-btn-primary navy">Yes, Reset</button>
+                  </>
+                )}
+                {dialog.kind === 'alert' && dialog.type === 'success' && (
+                  <button onClick={handleOk} className="dialog-btn-primary green" style={{flex:'unset',width:'100%'}}>Got it</button>
+                )}
+                {dialog.kind === 'alert' && dialog.type === 'error' && (
+                  <button onClick={handleOk} className="dialog-btn-primary red" style={{flex:'unset',width:'100%'}}>Dismiss</button>
+                )}
+                {dialog.kind === 'alert' && dialog.type === 'info' && (
+                  <button onClick={handleOk} className="dialog-btn-primary navy" style={{flex:'unset',width:'100%'}}>OK</button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
