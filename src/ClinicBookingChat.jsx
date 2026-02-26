@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 const ClinicBookingChat = () => {
-  const initialMessage = { id: 1, sender: 'bot', text: 'Hello! I am your AI assistant. Tell me where and when you need a doctor.' };
+  const initialMessage = { id: 1, sender: 'bot', text: 'Hello! I am the Health4Travel Assistant. Tell me where and when you need a doctor.' };
   const [messages, setMessages] = useState([initialMessage]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -133,24 +133,34 @@ const ClinicBookingChat = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-100 p-4 font-sans sm:py-4">
-      <div className="w-full max-w-lg bg-white sm:rounded-[2rem] shadow-2xl overflow-hidden flex flex-col h-[100dvh] sm:h-[700px] sm:max-h-[95vh] border border-slate-200 relative">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#edf5fa] text-black p-4 font-sans sm:py-8">
+      <div className="w-full max-w-lg bg-white sm:rounded-2xl shadow-xl overflow-hidden flex flex-col h-[100dvh] sm:h-[720px] sm:max-h-[95vh] border border-gray-200 relative">
         
-        {/* PREMIUM HEADER */}
-        <div className="bg-gradient-to-r from-indigo-600 to-blue-700 text-white p-5 shadow-md flex justify-between items-center z-10 sm:rounded-t-[2rem]">
-          <div className="font-extrabold text-xl flex items-center gap-3 tracking-wide">
-            <div className="bg-white/20 p-2 rounded-xl backdrop-blur-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" /></svg>
-            </div>
-            Smart Clinic Assistant
+        {/* EXACT HEALTH4TRAVEL HEADER */}
+        <div className="flex flex-col z-10 sm:rounded-t-2xl overflow-hidden shadow-sm border-b border-gray-200">
+          
+          {/* Top Header: White Background with Official Logo */}
+          <div className="bg-white py-4 flex justify-center items-center">
+            <img 
+              src="https://customer.health4travel.com/static/media/h4tLogo.3b3f9bb3bc531faa471910633d743d52.svg" 
+              alt="Health4Travel Logo" 
+              className="h-8" 
+            />
           </div>
-          <div className="flex items-center gap-2">
-            <button onClick={clearChat} title="Reset Chat" className="p-2 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-all text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
-            </button>
-            <button onClick={() => setIsAdminOpen(true)} title="Settings" className="p-2 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-all text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-            </button>
+
+          {/* Bottom Header Navigation: #183a59 Background with White Text */}
+          <div className="bg-[#183a59] text-white p-3 flex justify-between items-center px-5">
+            <div className="font-semibold text-[16px] tracking-wide flex items-center gap-2">
+              Smart Clinic Assistant
+            </div>
+            <div className="flex items-center gap-2">
+              <button onClick={clearChat} title="Reset Chat" className="p-1.5 bg-white/10 hover:bg-white/20 rounded-md transition-colors text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+              </button>
+              <button onClick={() => setIsAdminOpen(true)} title="Settings" className="p-1.5 bg-white/10 hover:bg-white/20 rounded-md transition-colors text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -158,36 +168,36 @@ const ClinicBookingChat = () => {
         {isAdminOpen && (
           <div className="absolute inset-0 z-50 flex flex-col animate-in fade-in duration-200">
             <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setIsAdminOpen(false)}></div>
-            <div className="relative mt-auto bg-white rounded-t-3xl shadow-2xl p-6 flex flex-col gap-5 h-[80%] border-t border-slate-200">
+            <div className="relative mt-auto bg-white rounded-t-2xl shadow-2xl p-6 flex flex-col gap-5 h-[80%] border-t border-gray-200">
               <div className="flex justify-between items-center">
-                <h2 className="font-extrabold text-slate-800 text-xl">Database Manager</h2>
-                <button onClick={() => setIsAdminOpen(false)} className="bg-slate-100 text-slate-500 hover:bg-slate-200 p-2 rounded-full transition-colors"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
+                <h2 className="font-bold text-black text-xl">Database Manager</h2>
+                <button onClick={() => setIsAdminOpen(false)} className="bg-gray-100 text-gray-500 hover:bg-gray-200 p-2 rounded-full transition-colors"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
               </div>
               
-              <div className="bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100">
-                <label className="block text-xs font-bold text-indigo-700 uppercase tracking-wider mb-3">1. Upload JSON File</label>
-                <input type="file" accept=".json" onChange={handleFileUpload} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer transition-colors" />
+              <div className="bg-[#edf5fa] p-4 rounded-xl border border-blue-100">
+                <label className="block text-xs font-bold text-[#183a59] uppercase tracking-wider mb-3">1. Upload JSON File</label>
+                <input type="file" accept=".json" onChange={handleFileUpload} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#183a59] file:text-white hover:file:bg-[#112940] cursor-pointer transition-colors" />
               </div>
 
               <div className="flex-1 flex flex-col">
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">2. Or Paste Content Directly</label>
-                <textarea className="flex-1 border border-slate-200 p-4 rounded-2xl font-mono text-xs focus:ring-2 focus:ring-indigo-500 outline-none resize-none bg-slate-50 text-slate-700 shadow-inner" value={jsonInput} onChange={(e) => setJsonInput(e.target.value)} placeholder='{ "clinics": [ ... ] }' />
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">2. Or Paste Content Directly</label>
+                <textarea className="flex-1 border border-gray-200 p-4 rounded-xl font-mono text-xs focus:ring-2 focus:ring-[#183a59] outline-none resize-none bg-gray-50 text-black shadow-inner" value={jsonInput} onChange={(e) => setJsonInput(e.target.value)} placeholder='{ "clinics": [ ... ] }' />
               </div>
               
-              <button onClick={handleAdminUpdate} className="bg-indigo-600 text-white py-4 rounded-2xl font-bold text-base hover:bg-indigo-700 transition-all shadow-lg hover:shadow-indigo-500/30">Sync to Server</button>
+              <button onClick={handleAdminUpdate} className="bg-[#183a59] text-white py-4 rounded-xl font-bold text-base hover:bg-[#112940] transition-colors shadow-md">Sync to Server</button>
             </div>
           </div>
         )}
 
-        {/* CHAT MESSAGES */}
-        <div className="flex-1 p-5 overflow-y-auto bg-slate-50 flex flex-col gap-6 custom-scrollbar">
+        {/* CHAT MESSAGES BODY: Uses #edf5fa (Body Background Color) */}
+        <div className="flex-1 p-5 overflow-y-auto bg-[#edf5fa] flex flex-col gap-5 custom-scrollbar">
           {messages.map((msg, idx) => (
             <div key={msg.id} className={`flex w-full ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
               
               {/* BOT AVATAR */}
               {msg.sender === 'bot' && (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center mr-2 shadow-sm flex-shrink-0 mt-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white"><path d="M16.5 7.5h-9v9h9v-9z" /><path fillRule="evenodd" d="M8.25 2.25A.75.75 0 019 3v.75h2.25V3a.75.75 0 011.5 0v.75H15V3a.75.75 0 011.5 0v.75h.75a3 3 0 013 3v.75H21A.75.75 0 0121 9h-.75v2.25H21a.75.75 0 010 1.5h-.75V15H21a.75.75 0 010 1.5h-.75v.75a3 3 0 01-3 3h-.75V21a.75.75 0 01-1.5 0v-.75h-2.25V21a.75.75 0 01-1.5 0v-.75H9V21a.75.75 0 01-1.5 0v-.75h-.75a3 3 0 01-3-3v-.75H3A.75.75 0 013 15h.75v-2.25H3a.75.75 0 010-1.5h.75V9H3A.75.75 0 013 7.5h.75V6.75a3 3 0 013-3h.75V3a.75.75 0 01.75-.75zM6 6.75A1.5 1.5 0 017.5 5.25h9A1.5 1.5 0 0118 6.75v9a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 016 15.75v-9zm4.5 4.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm6 0a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clipRule="evenodd" /></svg>
+                <div className="w-8 h-8 rounded-full bg-[#183a59] flex items-center justify-center mr-2 shadow flex-shrink-0 mt-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white"><path d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 17.25c1.74 0 3.354.536 4.688 1.44a.75.75 0 00.824 0A8.237 8.237 0 0116.25 17.25c1.74 0 3.354.536 4.688 1.44a.75.75 0 001-.707V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533.75.75 0 00-.75 0zM12 8.25a.75.75 0 01.75.75v1.5h1.5a.75.75 0 010 1.5h-1.5v1.5a.75.75 0 01-1.5 0v-1.5h-1.5a.75.75 0 010-1.5h1.5V9a.75.75 0 01.75-.75z" /></svg>
                 </div>
               )}
 
@@ -195,25 +205,24 @@ const ClinicBookingChat = () => {
                 {/* MESSAGE BUBBLE */}
                 <div className={`p-4 text-[15px] shadow-sm leading-relaxed ${
                     msg.sender === 'user' 
-                      ? 'bg-indigo-600 text-white rounded-2xl rounded-tr-sm shadow-indigo-500/20' 
-                      : 'bg-white text-slate-800 border border-slate-100 rounded-2xl rounded-tl-sm'
+                      ? 'bg-[#183a59] text-white rounded-2xl rounded-tr-sm' 
+                      : 'bg-white text-black border border-gray-200 rounded-2xl rounded-tl-sm'
                 }`}
                 dangerouslySetInnerHTML={{ __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>') }} 
                 />
                 
-                {/* UPDATED UI: SIMPLE TIME SLOT PILLS */}
+                {/* BUTTONS (H4T Blue outline) */}
                 {msg.slots && msg.slots.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-2 w-full">
                     {msg.slots.map((slot, i) => (
                       <button 
                         key={i} 
                         onClick={() => handleQuickBookClick(slot)} 
-                        className="bg-white border border-indigo-200 text-indigo-700 hover:bg-indigo-600 hover:text-white px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-sm flex flex-col items-center justify-center min-w-[75px] hover:shadow-md"
+                        className="bg-white border border-[#183a59] text-[#183a59] hover:bg-[#183a59] hover:text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm flex flex-col items-center justify-center min-w-[75px]"
                       >
                         <span>{slot.start_time}</span>
-                        {/* Only shows the day abbreviation if the bot is showing mixed days */}
                         {msg.text.includes("other days") && (
-                          <span className="text-[9px] font-normal uppercase mt-0.5 opacity-80">{slot.day.slice(0,3)}</span>
+                          <span className="text-[10px] font-medium uppercase mt-0.5 opacity-80">{slot.day.slice(0,3)}</span>
                         )}
                       </button>
                     ))}
@@ -222,61 +231,48 @@ const ClinicBookingChat = () => {
 
                 {/* PREMIUM CONFIRMATION TICKET */}
                 {msg.booking_details && (
-                  <div className="mt-4 bg-white border border-slate-200 rounded-2xl shadow-lg overflow-hidden flex flex-col">
-                    <div className="bg-slate-50 border-b border-slate-100 p-3 flex items-center justify-between">
-                      <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Appointment Ticket</span>
-                      <span className="flex h-2 w-2 relative"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span></span>
+                  <div className="mt-4 bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden flex flex-col">
+                    <div className="bg-gray-50 border-b border-gray-200 p-3 flex items-center justify-between">
+                      <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Appointment Ticket</span>
+                      <span className="flex h-2 w-2 relative"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span>
                     </div>
-                    <div className="p-5 flex flex-col gap-3">
+                    <div className="p-4 flex flex-col gap-3">
                       <div>
-                        <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Patient</p>
-                        <p className="text-sm font-bold text-slate-800">{msg.booking_details.patient_name} <span className="text-slate-400 font-normal">({msg.booking_details.phone_number})</span></p>
+                        <p className="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Patient</p>
+                        <p className="text-sm font-bold text-black">{msg.booking_details.patient_name} <span className="text-gray-400 font-normal">({msg.booking_details.phone_number})</span></p>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Date & Time</p>
-                          <p className="text-sm font-bold text-indigo-600">{msg.booking_details.day}, {msg.booking_details.time}</p>
+                          <p className="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Date & Time</p>
+                          <p className="text-sm font-bold text-[#183a59]">{msg.booking_details.day}, {msg.booking_details.time}</p>
                         </div>
                         <div>
-                          <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Location</p>
-                          <p className="text-sm font-bold text-slate-800 line-clamp-2">{msg.booking_details.clinic_name}</p>
+                          <p className="text-[10px] text-gray-400 uppercase font-semibold tracking-wider">Location</p>
+                          <p className="text-sm font-bold text-black line-clamp-2">{msg.booking_details.clinic_name}</p>
                         </div>
                       </div>
                     </div>
-                    <div className="p-3 bg-slate-50 border-t border-slate-100 flex gap-3">
-                      <button onClick={() => confirmBooking(msg.booking_details, msg.id)} className="flex-1 bg-indigo-600 text-white py-2.5 rounded-xl text-sm font-bold hover:bg-indigo-700 transition-all shadow-md hover:shadow-indigo-500/30">Confirm</button>
-                      <button onClick={() => cancelBooking(msg.id)} className="flex-1 bg-white border border-slate-200 text-slate-600 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-100 transition-colors">Cancel</button>
+                    <div className="p-3 bg-gray-50 border-t border-gray-200 flex gap-2">
+                      <button onClick={() => confirmBooking(msg.booking_details, msg.id)} className="flex-1 bg-[#183a59] text-white py-2 rounded-lg text-sm font-bold hover:bg-[#112940] transition-colors shadow-sm">Confirm</button>
+                      <button onClick={() => cancelBooking(msg.id)} className="flex-1 bg-white border border-gray-300 text-gray-600 py-2 rounded-lg text-sm font-bold hover:bg-gray-100 transition-colors">Cancel</button>
                     </div>
                   </div>
                 )}
               </div>
             </div>
           ))}
-
-          {isTyping && (
-            <div className="flex w-full justify-start items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0 animate-pulse">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-slate-400"><path d="M16.5 7.5h-9v9h9v-9z" /><path fillRule="evenodd" d="M8.25 2.25A.75.75 0 019 3v.75h2.25V3a.75.75 0 011.5 0v.75H15V3a.75.75 0 011.5 0v.75h.75a3 3 0 013 3v.75H21A.75.75 0 0121 9h-.75v2.25H21a.75.75 0 010 1.5h-.75V15H21a.75.75 0 010 1.5h-.75v.75a3 3 0 01-3 3h-.75V21a.75.75 0 01-1.5 0v-.75h-2.25V21a.75.75 0 01-1.5 0v-.75H9V21a.75.75 0 01-1.5 0v-.75h-.75a3 3 0 01-3-3v-.75H3A.75.75 0 013 15h.75v-2.25H3a.75.75 0 010-1.5h.75V9H3A.75.75 0 013 7.5h.75V6.75a3 3 0 013-3h.75V3a.75.75 0 01.75-.75zM6 6.75A1.5 1.5 0 017.5 5.25h9A1.5 1.5 0 0118 6.75v9a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 016 15.75v-9zm4.5 4.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm6 0a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clipRule="evenodd" /></svg>
-              </div>
-              <div className="bg-white border border-slate-100 p-3 rounded-2xl rounded-tl-sm flex gap-1 shadow-sm">
-                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></span>
-                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
-                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
-              </div>
-            </div>
-          )}
           <div ref={messagesEndRef} />
         </div>
 
         {/* INPUT AREA */}
-        <form onSubmit={handleSendMessage} className="p-4 bg-white border-t border-slate-100 flex gap-3 items-center sm:rounded-b-[2rem]">
-          <button type="button" onClick={toggleRecording} className={`p-3 rounded-full transition-all duration-300 ${isRecording ? 'bg-red-500 text-white animate-pulse shadow-lg shadow-red-500/30 scale-110' : 'bg-slate-100 text-indigo-600 hover:bg-slate-200'}`}>
+        <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-gray-200 flex gap-2 items-center sm:rounded-b-2xl">
+          <button type="button" onClick={toggleRecording} className={`p-3 rounded-full transition-all duration-300 ${isRecording ? 'bg-red-500 text-white animate-pulse shadow-md scale-105' : 'bg-gray-100 text-[#183a59] hover:bg-gray-200'}`}>
             {isRecording ? <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M4.5 7.5a3 3 0 013-3h9a3 3 0 013 3v9a3 3 0 01-3 3h-9a3 3 0 01-3-3v-9z" clipRule="evenodd" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" /></svg>}
           </button>
           
-          <input type="text" value={inputText} onChange={(e) => setInputText(e.target.value)} disabled={isRecording} placeholder={isRecording ? "Listening..." : "Message ClinicBot..."} className="flex-1 px-5 py-3 bg-slate-50 border border-slate-200 rounded-full focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50 outline-none text-[15px] transition-all disabled:opacity-50" />
+          <input type="text" value={inputText} onChange={(e) => setInputText(e.target.value)} disabled={isRecording} placeholder={isRecording ? "Listening..." : "Message H4T Assistant..."} className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-full focus:bg-white focus:border-[#183a59] focus:ring-2 focus:ring-[#edf5fa] outline-none text-[15px] transition-all disabled:opacity-50 text-black" />
           
-          <button type="submit" disabled={!inputText.trim() || isTyping || isRecording} className="p-3 bg-indigo-600 text-white rounded-full transition-all disabled:opacity-50 hover:bg-indigo-700 shadow-md hover:shadow-indigo-500/30">
+          <button type="submit" disabled={!inputText.trim() || isTyping || isRecording} className="p-3 bg-[#183a59] text-white rounded-full transition-colors disabled:opacity-50 hover:bg-[#112940] shadow-md">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 ml-0.5"><path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" /></svg>
           </button>
         </form>
